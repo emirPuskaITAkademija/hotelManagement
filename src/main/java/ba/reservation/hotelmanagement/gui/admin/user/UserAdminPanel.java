@@ -70,8 +70,6 @@ public class UserAdminPanel extends VBox {
         List<Privilege> privileges = PrivilegeServiceFactory.PRIVILEGE_SERVICE.getPrivilegeService().findAll();
         privilegeChoiceBox.setItems(FXCollections.observableList(privileges));
         privilegeChoiceBox.getSelectionModel().select(0);
-
-
         usernameTextField.setPromptText("Username..");
         passwordField.setPromptText("Password..");
         nameTextField.setPromptText("Ime..");
@@ -82,6 +80,7 @@ public class UserAdminPanel extends VBox {
     }
 
     private void addUser(ActionEvent event){
+        //TRANZIJENTAN
         User user = new User();
         user.setUsername(usernameTextField.getText());
         user.setPassword(passwordField.getText());
@@ -89,6 +88,7 @@ public class UserAdminPanel extends VBox {
         user.setSurname(surnameTextField.getText());
         user.setIdPrivilege(privilegeChoiceBox.getValue());
         UserServiceLocal userService = UserServiceFactory.USER_SERVICE.getUserService();
+        //TRANZIJENTNOG U PERZISTENTNO STANJE
         userService.create(user);
         userObservableList.add(user);
         clearInput();

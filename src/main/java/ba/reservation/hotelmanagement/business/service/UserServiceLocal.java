@@ -17,4 +17,7 @@ public interface UserServiceLocal {
     List<User> findAll();
 
     void create(User user);
+
+    void edit(User user);
+
 }

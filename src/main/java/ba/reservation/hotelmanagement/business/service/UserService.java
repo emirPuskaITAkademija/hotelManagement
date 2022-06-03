@@ -45,6 +45,7 @@ class UserService extends AbstractService<User> implements UserServiceLocal {
         return null;
     }
 
+
     @Override
     protected EntityManager getEntityManager() {
         EntityManagerFactory entityManagerFactory =  Persistence.createEntityManagerFactory(Constants.PU_NAME);
