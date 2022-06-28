@@ -1,10 +1,7 @@
-package ba.reservation.hotelmanagement.business.model;
+package com.hotelijerstvo.hotelmanagement.business.room;
 
+import com.hotelijerstvo.hotelmanagement.business.reservation.Reservation;
 
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,14 +13,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "room")
-@XmlRootElement
 @NamedQueries({
-//        @NamedQuery(name = "Room.findAll", query = "SELECT r FROM Room r"),
+        @NamedQuery(name = "Room.findAll", query = "SELECT r FROM Room r"),
         @NamedQuery(name = "Room.findById", query = "SELECT r FROM Room r WHERE r.id = :id"),
         @NamedQuery(name = "Room.findByCode", query = "SELECT r FROM Room r WHERE r.code = :code"),
         @NamedQuery(name = "Room.findByNumberOfBeds", query = "SELECT r FROM Room r WHERE r.numberOfBeds = :numberOfBeds"),
@@ -50,6 +47,17 @@ public class Room implements Serializable {
     private List<Reservation> reservationList;
 
     public Room() {
+    }
+
+    public Room(Integer id) {
+        this.id = id;
+    }
+
+    public Room(Integer id, String code, int numberOfBeds, BigDecimal price) {
+        this.id = id;
+        this.code = code;
+        this.numberOfBeds = numberOfBeds;
+        this.price = price;
     }
 
     public Integer getId() {
@@ -84,7 +92,7 @@ public class Room implements Serializable {
         this.price = price;
     }
 
-    @XmlTransient
+
     public List<Reservation> getReservationList() {
         return reservationList;
     }
@@ -115,10 +123,7 @@ public class Room implements Serializable {
 
     @Override
     public String toString() {
-        return "Room{" +
-                "id=" + id +
-                ", code='" + code +
-                '}';
+        return "com.hotelijerstvo.hotelmappingg.entity.Room[ id=" + id + " ]";
     }
-}
 
+}
