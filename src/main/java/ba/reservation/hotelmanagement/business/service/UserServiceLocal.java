@@ -20,4 +20,9 @@ public interface UserServiceLocal {
 
     void edit(User user);
 
+    void remove(User user);
+
+    void removeById(Integer id);
+
+    User find(Integer id);
 }

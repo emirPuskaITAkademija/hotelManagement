@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public abstract class AbstractService<E> {
+public abstract class AbstractService<E, P> {
 
     private Class<E> entityClass;
 
@@ -33,10 +33,28 @@ public abstract class AbstractService<E> {
     }
 
     public void remove(E entity) {
-        getEntityManager().remove(entity);
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        if (!entityManager.contains(entity)) {
+            entity = entityManager.merge(entity);
+        }
+        entityManager.remove(entity);
+        entityManager.flush();
+        entityManager.getTransaction().commit();
     }
 
-    public E find(Object id) {
+    public void removeById(P primaryKey) {
+        EntityManager entityManager = getEntityManager();
+        // begin transaction
+        entityManager.getTransaction().begin();
+        E entity = entityManager.find(entityClass, primaryKey);
+        entityManager.remove(entity);
+        entityManager.flush();
+        // commit transaction at all
+        entityManager.getTransaction().commit();
+    }
+
+    public E find(P id) {
         return getEntityManager().find(entityClass, id);
     }
 

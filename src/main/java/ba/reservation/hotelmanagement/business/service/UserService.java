@@ -9,7 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-class UserService extends AbstractService<User> implements UserServiceLocal {
+class UserService extends AbstractService<User, Integer> implements UserServiceLocal {//User find Integer
 
 
     public UserService() {

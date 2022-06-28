@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
- class PrivilegeService extends AbstractService<Privilege> implements PrivilegeServiceLocal{
+ class PrivilegeService extends AbstractService<Privilege, Integer> implements PrivilegeServiceLocal{
     public PrivilegeService() {
         super(Privilege.class);
     }

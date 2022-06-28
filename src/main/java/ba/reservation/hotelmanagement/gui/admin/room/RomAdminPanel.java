@@ -34,6 +34,7 @@ public class RomAdminPanel extends VBox {
     private TextField numberOfBedsTextField = new TextField();
     private TextField priceTextField = new TextField();
     private Button addRoomButton = new Button("Dodaj sobu");
+    private Button removeRoomButton = new Button("Obriši sobu");
 
     public  RomAdminPanel(){
         titleLabel.setFont(new Font("Arial", 20));
@@ -62,7 +63,8 @@ public class RomAdminPanel extends VBox {
         RoomService roomService = RoomServiceFactory.SERVICE.getRoomService();
         roomObservableList = FXCollections.observableList(roomService.findAll());
         roomTableView.setItems(roomObservableList);
-        roomTableView.getColumns().addAll(roomCodeColumn, numberOfBedsColumn, roomPriceColumn);
+        roomTableView.getColumns().addAll(
+                roomCodeColumn, numberOfBedsColumn, roomPriceColumn);
 
         getChildren().addAll(roomTableView, getForm());
     }
@@ -74,8 +76,23 @@ public class RomAdminPanel extends VBox {
         numberOfBedsTextField.setPromptText("Broj kreveta u sobi..");
         priceTextField.setPromptText("Cijena sobe..");
         addRoomButton.setOnAction(this::addRoom);
-        form.getChildren().addAll(roomCodeTextField, numberOfBedsTextField, priceTextField, addRoomButton);
+        removeRoomButton.setOnAction(this::removeRoom);
+        form.getChildren().addAll(
+                roomCodeTextField,
+                numberOfBedsTextField,
+                priceTextField,
+                addRoomButton,
+                removeRoomButton);
         return form;
+    }
+
+    private void removeRoom(ActionEvent actionEvent) {
+        Room selectedRoom = roomTableView.getSelectionModel().getSelectedItem();
+        RoomService roomService = RoomServiceFactory.SERVICE.getRoomService();
+        //db delete
+        roomService.remove(selectedRoom);
+        //table view delete
+        roomObservableList.remove(selectedRoom);
     }
 
     private void addRoom(ActionEvent actionEvent){

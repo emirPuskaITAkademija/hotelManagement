@@ -20,7 +20,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import org.hibernate.tool.schema.Action;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class UserAdminPanel extends VBox {
     private Button addUserButton = new Button("Dodaj");
     private Button deleteUserButton = new Button("Obriši");
 
-    public UserAdminPanel(){
+    public UserAdminPanel() {
         titleLabel.setFont(new Font("Arial", 20));
         setSpacing(5);
         setPadding(new Insets(10, 10, 10, 10));
@@ -63,7 +62,7 @@ public class UserAdminPanel extends VBox {
         getChildren().addAll(titleLabel, userTableView, getForm());
     }
 
-    private HBox getForm(){
+    private HBox getForm() {
         HBox form = new HBox();
         form.setSpacing(3);
 
@@ -75,26 +74,54 @@ public class UserAdminPanel extends VBox {
         nameTextField.setPromptText("Ime..");
         surnameTextField.setPromptText("Prezime..");
         addUserButton.setOnAction(this::addUser);
-        form.getChildren().addAll(usernameTextField, passwordField,nameTextField, surnameTextField, privilegeChoiceBox, addUserButton);
+        deleteUserButton.setOnAction(this::removeUser);
+        form.getChildren().addAll(
+                usernameTextField,
+                passwordField,
+                nameTextField,
+                surnameTextField,
+                privilegeChoiceBox,
+                addUserButton,
+                deleteUserButton);
         return form;
     }
 
-    private void addUser(ActionEvent event){
-        //TRANZIJENTAN
-        User user = new User();
-        user.setUsername(usernameTextField.getText());
-        user.setPassword(passwordField.getText());
-        user.setName(nameTextField.getText());
-        user.setSurname(surnameTextField.getText());
-        user.setIdPrivilege(privilegeChoiceBox.getValue());
+    private void removeUser(ActionEvent actionEvent) {
+        User selectedUser = userTableView.getSelectionModel().getSelectedItem();
         UserServiceLocal userService = UserServiceFactory.USER_SERVICE.getUserService();
-        //TRANZIJENTNOG U PERZISTENTNO STANJE
-        userService.create(user);
-        userObservableList.add(user);
-        clearInput();
+        //DB
+        userService.removeById(selectedUser.getId());
+        //Table View
+        userObservableList.remove(selectedUser);
     }
 
-    private void clearInput(){
+    private void addUser(ActionEvent event) {
+        if (validate()) {
+            //TRANZIJENTAN
+            User user = new User();
+            user.setUsername(usernameTextField.getText());
+            user.setPassword(passwordField.getText());
+            user.setName(nameTextField.getText());
+            user.setSurname(surnameTextField.getText());
+            user.setIdPrivilege(privilegeChoiceBox.getValue());
+            UserServiceLocal userService = UserServiceFactory.USER_SERVICE.getUserService();
+            //TRANZIJENTNOG U PERZISTENTNO STANJE
+            userService.create(user);
+            userObservableList.add(user);
+            clearInput();
+        }else{
+            //prikažite smislenu poruku korisniku
+        }
+    }
+
+    private boolean validate() {
+        return !usernameTextField.getText().isBlank()
+                && !passwordField.getText().isBlank()
+                && !nameTextField.getText().isBlank()
+                && !surnameTextField.getText().isBlank();
+    }
+
+    private void clearInput() {
         usernameTextField.setText("");
         passwordField.setText("");
         nameTextField.clear();

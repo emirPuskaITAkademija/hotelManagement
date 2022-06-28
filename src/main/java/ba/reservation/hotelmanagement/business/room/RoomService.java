@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public class RoomService extends AbstractService<Room> {
+public class RoomService extends AbstractService<Room, Integer> {
     RoomService() {
         super(Room.class);
     }
